@@ -35,17 +35,23 @@ export async function hexHash(s: string): Promise<string> {
 }
 
 export async function getScopeHash(tags: string[]): Promise<string> {
+  // be careful of duplicate tags
   const hashed = (await Promise.all(tags.map((tag) => hexHash(tag)))).sort();
   return await hexHash(hashed.join(""));
 }
 
-async function toValidScope(scope: Scope): Promise<Result<ValidScope>> {
-  if (scope.name === "") {
+function removeDuplicates(arr: string[]): string[] {
+  return Array.from(new Set(arr));
+}
+
+async function toValidScope(iscope: Scope): Promise<Result<ValidScope>> {
+  if (iscope.name === "") {
     return Result.Err("Scope name is empty");
   }
-  if (/[[\]]/.test(scope.name)) {
-    return Result.Err(`Scope ${scope.name} contains []`);
+  if (/[[\]]/.test(iscope.name)) {
+    return Result.Err(`Scope ${iscope.name} contains []`);
   }
+  const scope = { ...iscope, tags: removeDuplicates(iscope.tags) };
   const hashed = (
     await Promise.all(
       scope.tags.map(

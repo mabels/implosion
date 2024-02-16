@@ -130,6 +130,19 @@ async function getImplosion(): Promise<Implosion> {
   ).Ok();
 }
 
+it("remove duplicates from tags", async () => {
+  const res = await Implosion.create({
+    scopes: [
+      {
+        name: "xtest",
+        checksum: "2icyXAVNHz29D1dTVYE59sm5foRZmqqBTY26bZdN3q58",
+        tags: ["c", "a", "b", "a", "c"],
+      },
+    ],
+  });
+  expect(res.isOk()).toBe(true);
+});
+
 it("implosion toBits scope not found", async () => {
   const implosion = await getImplosion();
   const bits = implosion.toBits([
