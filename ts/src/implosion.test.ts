@@ -1,4 +1,4 @@
-import { Implosion, getScopeHash, hexHash, uarray2bits } from "./implosion";
+import { Implosion, getScopeHash, hexHash, removeDuplicates, uarray2bits } from "./implosion";
 
 it("hexHash", async () => {
   const hash = await hexHash("hello");
@@ -10,6 +10,10 @@ it("getScopeHash", async () => {
   expect(await getScopeHash(["b", "a"])).toBe("2HGWGNKVpyBAqxPboi5rSY5rStbRtUrfUWrnQwTzF3gM");
   expect(await getScopeHash(["b", "a", "c"])).toBe("2icyXAVNHz29D1dTVYE59sm5foRZmqqBTY26bZdN3q58");
 });
+
+it("removeDuplicates", () => {
+	expect(removeDuplicates(["d", "a", "b", "a", "c"])).toEqual(["d", "a", "b", "c"])
+})
 
 it("implosion empty", async () => {
   const implosion = await Implosion.create({
@@ -247,8 +251,6 @@ async function ensureOutBitVect(inb: InBitVect): Promise<OutBitVect> {
 }
 
 it("ensureOutBitVect", async () => {
-  const a = new Uint8Array(200);
-  a[19] = 1;
   expect(
     await ensureOutBitVect({
       inAsBits:

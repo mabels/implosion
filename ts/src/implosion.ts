@@ -40,7 +40,7 @@ export async function getScopeHash(tags: string[]): Promise<string> {
   return await hexHash(hashed.join(""));
 }
 
-function removeDuplicates(arr: string[]): string[] {
+export function removeDuplicates(arr: string[]): string[] {
   return Array.from(new Set(arr));
 }
 
@@ -82,7 +82,10 @@ async function toValidScope(iscope: Scope): Promise<Result<ValidScope>> {
       },
       {} as Record<string, number>,
     ),
-    tags: hashed.sort((a, b) => a.idx - b.idx).map((h) => h.tag),
+    tags: hashed.reduce((acc, h) => {
+      acc[h.idx] = h.tag;
+      return acc
+    }, Array(hashed.length).fill('')),
   });
 }
 
