@@ -162,7 +162,7 @@ export class Implosion {
       for (let i = 0; i < bits.length; i++) {
         for (let j = 0; j < 8; j++) {
           if (bits[i] & (1 << j)) {
-            tags.push(scope.tags[i * 8 + j]);
+            tags.push(scope.tags[(i * 8) + j]);
           }
         }
       }
