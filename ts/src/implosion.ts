@@ -1,4 +1,4 @@
-import { Result } from "@adviser/cement";
+import { Result, ResultError } from "@adviser/cement";
 import bs58 from "bs58";
 
 export interface Scope {
@@ -95,7 +95,7 @@ async function Scopes2ValidScopes(scopes: Scope[]): Promise<Result<ValidScope[]>
   for (const scope of scopes) {
     const rvsc = await toValidScope(scope);
     if (rvsc.isErr()) {
-      return rvsc as unknown as Result<ValidScope[]>;
+      return rvsc as unknown as ResultError<Error>
     }
     ret.push(rvsc.Ok());
   }
